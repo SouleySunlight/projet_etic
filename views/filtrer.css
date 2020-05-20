@@ -1,0 +1,42 @@
+
+html, body {
+    font: 10pt arial;
+    color: #cae8d5;
+
+
+}
+#zone{
+    background-color: #204051;
+    padding: 2rem
+}
+
+#redir{
+    color: #cae8d5;
+}
+#viz {
+
+    width: 900px;
+    height: 600px;
+    font: 12pt arial;
+    margin-top: 5rem;
+    margin: 0 auto;
+    background-color: white;
+}
+#typeNoeud{
+    float: left;
+
+}
+#degre{
+    float: left;
+    padding: 2rem;
+    padding-top: 4rem;
+}
+#zoom_noeud{
+
+    padding-right: 2rem;
+
+}
+h3{
+    text-decoration: underline;
+}
+

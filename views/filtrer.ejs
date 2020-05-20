@@ -1,0 +1,225 @@
+<!doctype html>
+<html>
+<head>
+    <title> Visualisation graphe </title>
+
+    <script src="https://cdn.neo4jlabs.com/neovis.js/v1.4.0/neovis.js"></script>
+    <link rel="stylesheet" type="text/css" href="filtrer.css" />
+    <script src="https://code.jquery.com/jquery-3.5.1.js"
+            integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+            crossorigin="anonymous"></script>
+
+</head>
+
+
+<script type="text/javascript">
+    var filtre = 'MATCH(n) OPTIONAL MATCH(c)-[r]->(a) SET n.identifiant= id(n) SET r.identifiant = id(r) RETURN n,r,c,a';
+    var viz;
+
+
+    function aff() {
+        draw_filtrer(filtre)
+
+    };
+    function draw_filtrer(a) {
+        var config = {
+            container_id :"viz",
+            server_url : "bolt://localhost:7687",
+            server_user :"neo4j",
+            server_password : "hjklhjkl",
+
+            labels :{
+                "TACHE" : {
+                    "caption": "nom"
+
+                },
+                "ENJEU" :{
+                    "caption": "nom",
+
+                },
+                "TRANSITION" : {
+                    "caption": "nom",
+
+
+                },
+                "OBJECTIF" : {
+                    "caption": "nom",
+
+                },
+                "ACTION" : {
+                    "caption": "nom",
+                    
+                }
+
+
+            },
+            relationships : {
+                "LIEN": {
+                    "caption": "cout",
+                    "thickness": "cout"
+                }
+            },
+            arrows : true,
+
+
+
+            initial_cypher: a,
+
+        }
+        viz = new NeoVis.default(config);
+        viz.render();
+    }
+</script>
+
+
+<div id="zone">
+        <div id="typeNoeud">
+            <h3>Filtrer un type de noeud</h3>
+        <label> Quels noeuds afficher ? </label>
+        <br>
+        <input type="radio" id="TOUT"
+               name="noeud" value="TOUT">
+        <label for="TOUT">Tout</label>
+        <br>
+        <input type="radio" id="TACHE"
+               name="noeud" value="TACHE">
+        <label for="TACHE">Tâche</label>
+        <br>
+
+        <input type="radio" id="ACTION"
+               name="noeud" value="ACTION">
+        <label for="ACTION">Action</label>
+        <br>
+        <input type="radio" id="OBJECTIF"
+               name="noeud" value="OBJECTIF">
+        <label for="OBJECTIF">Objectif</label>
+
+        <br>
+        <input type="radio" id="ENJEU"
+               name="noeud" value="ENJEU">
+        <label for="ENJEU">Enjeu</label>
+        <br>
+        <input type="radio" id="TRANSITION"
+               name="noeud" value="TRANSITION">
+        <label for="TRANSITION">Transition</label>
+
+        </div>
+
+<div id="degre">
+    <label> Degré de relation ? </label>
+    <br>
+
+    <input type="radio" id="1"
+           name="deg" value="1">
+    <label for="1">1</label>
+    <br>
+
+    <input type="radio" id="2"
+           name="deg" value="2">
+    <label for="2">2</label>
+    <br>
+    <input type="radio" id="3"
+           name="deg" value="3">
+    <label for="3">3</label>
+
+    <br>
+    <input type="radio" id="4"
+           name="deg" value="4">
+    <label for="4">4</label>
+    <br>
+    <input type="radio" id="AUTRE"
+           name="deg" value="AUTRE">
+    <label for="AUTRE">Autre</label>
+    <input type="text" id="choix">
+    <input type="button" value="Filtrer" id="filtrage_noeud">
+
+</div>
+
+<div id="zoom_noeud">
+    <h3>Filtrer sur un noeud précis</h3>
+    <label> Identifiant du noeud à centrer</label>
+    <input type="text" id="node">
+    <br>
+
+    <label> Degré de relation ? </label>
+    <br>
+
+    <input type="radio" id="1"
+           name="degre" value="1">
+    <label for="1">1</label>
+    <br>
+
+    <input type="radio" id="2"
+           name="degre" value="2">
+    <label for="2">2</label>
+    <br>
+    <input type="radio" id="3"
+           name="degre" value="3">
+    <label for="3">3</label>
+
+    <br>
+    <input type="radio" id="4"
+           name="degre" value="4">
+    <label for="4">4</label>
+    <br>
+    <input type="radio" id="AUTRE"
+           name="degre" value="AUTRE">
+    <label for="AUTRE">Autre</label>
+    <input type="text" id="choix">
+    <input type="button" value="Filtrer" id="zoom">
+    <p id="Retour"> <a id="redir" href="/"> Retourner à la page d'accueil</a></p>
+
+</div>
+
+
+
+
+</div>
+
+<body onload ="aff()">
+<script>
+    $("#zoom").click(function() {
+        var res= $('#node').val();
+        var degre = $('input[name=degre]:checked').val();
+
+
+            if(degre == "AUTRE"){
+                autre = $("#choix").val();
+                filtre = 'MATCH(n)  WHERE n.identifiant=' + res +' OPTIONAL MATCH(c)-[r:LIEN*1..'+ autre +']->(a) WHERE  c.identifiant=' + res + ' OPTIONAL MATCH(x)-[y:LIEN*1..'+ autre +']->(z) WHERE  z.identifiant=' + res +' return n, c, r, a,x,y,z   ';
+            }
+
+            else{
+                filtre = 'MATCH(n)  WHERE n.identifiant=' + res +' OPTIONAL MATCH(c)-[r:LIEN*1..'+ degre +']->(a) WHERE  c.identifiant=' + res + ' OPTIONAL MATCH(x)-[y:LIEN*1..'+ degre +']->(z) WHERE  z.identifiant=' + res + ' return n, c, r, a, x, y, z';
+            }
+
+
+        alert(filtre)
+        aff();
+    });
+</script>
+<script>
+    $("#filtrage_noeud").click(function() {
+        var res= $('input[name=noeud]:checked').val();
+        var degre = $('input[name=deg]:checked').val();
+
+        if(res == "TOUT"){
+            filtre = 'MATCH(n) OPTIONAL MATCH(c)-[r]->(a) RETURN n,r,c,a';
+        }
+        else {
+            if(degre == "AUTRE"){
+                autre = $("#choix").val();
+                filtre = 'MATCH(n:' + res + ') OPTIONAL MATCH(c:' + res + ')-[r:LIEN*1..'+ autre +']->(a) return n, c, r, a';
+            }
+
+            else{
+                filtre = 'MATCH(n:' + res + ') OPTIONAL MATCH(c:' + res + ')-[r:LIEN*1..'+degre+']->(a) return n, c, r, a';
+            }
+
+        }
+
+        aff();
+    });
+</script>
+<div id = "viz"></div>
+</body>
+</html>

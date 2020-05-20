@@ -1,0 +1,19 @@
+{
+  "name": "projet_etic",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Souleyman BEN HADJ BELGACEM",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "*",
+    "ejs": "*",
+    "express": "*",
+    "fs": "*",
+    "multer": "*"
+  }
+}

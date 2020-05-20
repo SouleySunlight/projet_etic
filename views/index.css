@@ -1,0 +1,44 @@
+
+html, body {
+    font: 10pt arial;
+    background-color: white;
+    color: #cae8d5;
+
+}
+
+
+#viz {
+
+    width: 1500px;
+    height: 1500px;
+    font: 12pt arial;
+    margin-top: 5rem;
+    margin: 0 auto;
+    background-color: white;
+}
+#champ_nom {
+    padding-left: 3rem;
+}
+#ok_lien{
+    margin-left: 5rem;
+}
+#creaLien{
+    float: left;
+    margin-left: 2rem;
+    margin-right: 2rem;
+    margin-bottom: 2rem;
+}
+#creaNoeud{
+    float: left;
+}
+#modif{
+    background-color: #204051;
+    padding: 3rem;
+}
+h3{
+    text-decoration: underline;
+}
+#redirection{
+    color: #cae8d5;
+}
+

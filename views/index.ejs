@@ -1,0 +1,168 @@
+
+<!doctype html>
+<html>
+<head>
+    <title> Visualisation graphe </title>
+
+    <script src="https://cdn.neo4jlabs.com/neovis.js/v1.4.0/neovis.js"></script>
+    <link rel="stylesheet" type="text/css" href="index.css" />
+</head>
+<script type="text/javascript">
+    function draw() {
+        var config = {
+            container_id :"viz",
+            server_url : "bolt://localhost:7687",
+            server_user :"neo4j",
+            server_password : "hjklhjkl",
+
+            labels :{
+                "TACHE" : {
+                    "caption": "identifiant",
+
+
+                },
+                "ENJEU" :{
+                    "caption": "identifiant",
+
+                    },
+                "TRANSITION" : {
+                    "caption": "identifiant",
+
+                },
+                "OBJECTIF" : {
+                    "caption": "identifiant",
+
+                },
+                "ACTION" : {
+                    "caption": "identifiant",
+
+                }
+
+
+            },
+            relationships : {
+                "LIEN": {
+                    "caption": "cout",
+                    //"thickness": "cout"
+                }
+            },
+            arrows : true,
+
+
+
+            initial_cypher: "MATCH(n) OPTIONAL MATCH(c)-[r]->(a)  SET r.identifiant = id(r) RETURN n,r,c,a"
+
+        }
+
+        viz = new NeoVis.default(config);
+        viz.render();
+    }
+</script>
+<div id="modif">
+<div id="creaNoeud">
+<h3> Créer un noeud </h3>
+<br>
+<form method="post" action="/ajout/noeud" onsubmit="return draw()">
+
+    <input type="radio" id="TACHE"
+           name="noeud" value="TACHE">
+    <label for="TACHE">Tâche</label>
+    <br>
+
+    <input type="radio" id="ACTION"
+           name="noeud" value="ACTION">
+    <label for="ACTION">Action</label>
+    <br>
+    <input type="radio" id="OBJECTIF"
+           name="noeud" value="OBJECTIF">
+    <label for="OBJECTIF">Objectif</label>
+
+    <label id="champ_nom"> Nom </label>
+    <input type="text" name="name">
+
+    <input type="submit" name="Valider">
+    <br>
+    <input type="radio" id="ENJEU"
+           name="noeud" value="ENJEU">
+    <label for="ENJEU">Enjeu</label>
+    <br>
+    <input type="radio" id="TRANSITION"
+           name="noeud" value="TRANSITION">
+    <label for="TRANSITION">Transition</label>
+
+
+
+</form>
+</div>
+<br>
+<div id="creaLien">
+<h3>Création de relation</h3>
+<form method="post" action="/ajout/relation" onsubmit="return draw()">
+    <label id="depart">Identifiant du point de départ </label>
+    <input type="text" name="ptdepart">
+    <br>
+    <label id="arrivee">Identifiant du point d'arrivée   </label>
+    <input type="text" name="ptarr">
+    <br>
+    <input type="radio" id="1"
+           name="cout" value="1">
+    <label for="1">1</label>
+    <br>
+
+    <input type="radio" id="2"
+           name="cout" value="2">
+    <label for="2">2</label>
+    <br>
+    <input type="radio" id="3"
+           name="cout" value="3">
+    <label for="3">3</label>
+
+    <input id="ok_lien" type="submit" name="Valider">
+    <br>
+    <input type="radio" id="4"
+           name="cout" value="4">
+    <label for="4">4</label>
+    <br>
+    <input type="radio" id="5"
+           name="cout" value="5">
+    <label for="5">5</label>
+    <br>
+</form>
+</div>
+
+
+    <h3>Supprimer Noeud</h3>
+    <form method="post" action="/supp/noeud" onsubmit="return draw()">
+        <label id="suppnoeud">Identifiant du noeud à supprimer </label>
+        <input type="text" name="noeud_a_supprimer">
+        <input id="ok_supp_noeud" type="submit" name="Valider">
+    </form>
+
+    <h3>Supprimer Relation</h3>
+    <form method="post" action="/supp/relation" onsubmit="return draw()">
+        <label id="supprelation">Identifiant de la relation à supprimer </label>
+        <input type="text" name="rel_a_supprimer">
+     <input id="ok_supp_rel" type="submit" name="Valider">
+    </form>
+    <p > <a id="redirection"  href="/filtrer"> Filtrer le graphe</a></p>
+
+    <h3> Ajout Enjeux</h3>
+    <form method="post" action="/import/enjeux" onsubmit="return draw()" enctype="multipart/form-data">
+    <input type="file" id="file_enjeux" name="Chosir un fichier" accept=".csv">
+        <input id="ok_import_enjeux" type="submit" name="Valider">
+    </form>
+    <h3> Ajout Transitions</h3>
+    <form method="post" action="/import/transitions" onsubmit="return draw()" enctype="multipart/form-data">
+        <input type="file" id="file_transitions" name="Chosir un fichier" accept=".csv">
+        <input id="ok_import_transitions" type="submit" name="Valider">
+    </form>
+    <h3> Ajout Propositions</h3>
+    <form method="post" action="/import/propositions" onsubmit="return draw()" enctype="multipart/form-data">
+        <input type="file" id="file_propositions" name="Chosir un fichier" accept=".csv">
+        <input id="ok_import_propositions" type="submit" name="Valider">
+    </form>
+</div>
+<body onload ="draw()">
+<div id = "viz"></div>
+</body>
+</html>
