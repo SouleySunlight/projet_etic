@@ -2,95 +2,108 @@
 <html>
 <head>
     <title>Network</title>
-    <script type="text/javascript" src="test2.js"></script>
     <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+    <script src="https://code.jquery.com/jquery-2.2.4.js"
+            integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI="
+            crossorigin="anonymous"></script>
     <style type="text/css">
         #mynetwork {
             width: 1000px;
             height: 1000px;
+            float: left;
             border: 1px solid lightgray;
+        }
+        #eventSpan{
+            font: 10pt Arial;
         }
     </style>
 </head>
 <body>
 <div id="mynetwork"></div>
+<pre id="eventSpan"></pre>
 <script type="text/javascript">
-    alert("ouille")
-    var nodes = new vis.DataSet([
-        {id:"1", label:"ENJEU",nom:"Articuler diversit�  excellence et massification "}
-        ,{id:"2", label:"ENJEU",nom:"Pr�server autonomie et libert� dans une dynamique d'alliances strat�giques" }
-        ,{id:"3", label:"ENJEU",nom:"R�inventer la formation pour accompagner les changements de soci�t� " }
-        ,{id:"4", label:"ENJEU",nom:"Focaliser la recherche sur des enjeux soci�taux majeurs en synergie avec la formation " }
-        ,{id:"5", label:"ENJEU",nom:"Incarner l'humanisme scientifique" }
-        ,{id:"6", label:"ENJEU",nom:"Oser l'esprit pionnier " }
-        ,{id:"7", label:"ENJEU",nom:"Partager avec les entreprises des valeurs sociales  environnementales et �conomiques"}
-        ,{id:"8", label:"ENJEU",nom:"Affirmer le mod�le INSA dans la strat�gie internationale " }
-        ,{id:"9", label:"ENJEU",nom:"Mettre les personnels au c�ur du projet INSA2040" }
-        ,{id:"10", label:"ENJEU",nom:"Non spécifique" }
-        ,{id:"12",label:"TRANSITION",nom:"Sociale" }
-        ,{id:"14",label:"TRANSITION",nom:"Num�rique" }
-        ,{id:"15",label:"TRANSITION",nom:"Image" }
-        ,{id:"16",label:"TRANSITION",nom:"Environnementale" }
-        ,{id:"17",label:"TRANSITION",nom:"Economique" }
-    ] );
 
     // create an array with edges
-    var edges = new vis.DataSet( [
-        {from:"10", to:"0",label:"4"}
-        ,{from:"10", to:"1",label:"1"}
-        ,{from:"10", to:"2",label:"2"}
-        ,{from:"10", to:"3",label:"1"}
-        ,{from:"10", to:"4",label:"4"}
-        ,{from:"10", to:"5",label:"3"}
-        ,{from:"10", to:"6",label:"3"}
-        ,{from:"10", to:"7",label:"1"}
-        ,{from:"10", to:"8",label:"4"}
-        ,{from:"11", to:"0",label:"2"}
-        ,{from:"11", to:"1",label:"1"}
-        ,{from:"11", to:"2",label:"4"}
-        ,{from:"11", to:"3",label:"3"}
-        ,{from:"11", to:"4",label:"2"}
-        ,{from:"11", to:"5",label:"4"}
-        ,{from:"11", to:"6",label:"3"}
-        ,{from:"11", to:"7",label:"1"}
-        ,{from:"11", to:"8",label:"2"}
-        ,{from:"12", to:"0",label:"1"}
-        ,{from:"12", to:"1",label:"4"}
-        ,{from:"12", to:"2",label:"2"}
-        ,{from:"12", to:"3",label:"2"}
-        ,{from:"12", to:"4",label:"2"}
-        ,{from:"12", to:"5",label:"3"}
-        ,{from:"12", to:"6",label:"2"}
-        ,{from:"12", to:"7",label:"4"}
-        ,{from:"12", to:"8",label:"1"}
-        ,{from:"13", to:"0",label:"0"}
-        ,{from:"13", to:"1",label:"1"}
-        ,{from:"13", to:"2",label:"3"}
-        ,{from:"13", to:"3",label:"4"}
-        ,{from:"13", to:"4",label:"4"}
-        ,{from:"13", to:"5",label:"2"}
-        ,{from:"13", to:"6",label:"3"}
-        ,{from:"13", to:"7",label:"1"}
-        ,{from:"13", to:"8",label:"2"}
-        ,{from:"14", to:"0",label:"2"}
-        ,{from:"14", to:"1",label:"2"}
-        ,{from:"14", to:"2",label:"1"}
-        ,{from:"14", to:"3",label:"2"}
-        ,{from:"14", to:"4",label:"1"}
-        ,{from:"14", to:"5",label:"3"}
-        ,{from:"14", to:"6",label:"2"}
-        ,{from:"14", to:"7",label:"2"}
-        ,{from:"14", to:"8",label:"1"}
+    var nodes = new vis.DataSet([
+        { id: 1, label: "Node 1" },
+        { id: 2, label: "Node 2" },
+        { id: 3, label: "Node 3" },
+        { id: 4, label: "Node 4" },
+        { id: 5, label: "Node 5" }
+    ]);
+
+    // create an array with edges
+    var edges = new vis.DataSet([
+        { from: 1, to: 3 },
+        { from: 1, to: 2 },
+        { from: 2, to: 4 },
+        { from: 2, to: 5 },
+        { from: 3, to: 3 }
     ]);
 
     // create a network
     var container = document.getElementById("mynetwork");
-    var data = {
-        nodes: nodes,
-        edges: edges
-    };
-    var options = {};
-    var network = new vis.Network(container, data, options);
+    var options = {
+        edges: {
+            arrows: {
+                to: {enabled: true, scaleFactor: 0.75, type: 'arrow'}
+            },
+            color: {
+                // color:'#848484',
+                color: '#848484',
+                highlight: 'red' ,
+                hover: 'red',
+                inherit: 'from',
+                opacity: 1.0
+            }
+        },
+        physics: {
+            barnesHut: {
+                gravitationalConstant: -2000,
+                centralGravity: 0.3,
+                // springLength: 95,
+                springLength: 500,
+                springConstant: 0.01,
+                damping: 0.09,
+                avoidOverlap: 0
+            },
+        },
+        manipulation: {
+            enabled: true
+        }
+        }
+
+
+
+            $.getJSON("data.json")
+                .done(function(json){
+                    var data ={
+                        nodes: new vis.DataSet(json.nodes),
+                        edges : new vis.DataSet(json.edges)
+
+                    }
+
+                    console.log(data)
+                    var network = new vis.Network(container, data, options);
+                    network.on("click", function(params) {
+                        params.event = "[original event]";
+                        document.getElementById("eventSpan").innerHTML =
+                            "<h2>Noeud sélectionné:</h2>" + " nom : " + json.nodes[params.nodes].nom +
+                                "\n label :" + json.nodes[params.nodes].label +
+                            "\n id : " + json.nodes[params.nodes].id
+                        console.log(json.nodes[params.nodes])
+                    });
+                })
+
+
+
+
+
+    //var network = new vis.Network(container, data, options);
+
+
+
+
 
 
 </script>
