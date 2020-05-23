@@ -17,10 +17,11 @@ app.use(express.static(__dirname + '/views'));
 
 let upload = multer({dest: 'Uploads/'});
 
-app.get('/test', function(req,res){
-    res.render('test');
+app.get('/test', function(req,res) {
 
+        res.render('test');
 });
+
 app.get('/', function(req,res){
            res.render('index');
 
