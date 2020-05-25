@@ -3,66 +3,158 @@
 <html>
 <head>
     <title> Visualisation graphe </title>
+    <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+    <script src="https://code.jquery.com/jquery-2.2.4.js"
+            integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI="
+            crossorigin="anonymous"></script>
 
-    <script src="https://cdn.neo4jlabs.com/neovis.js/v1.4.0/neovis.js"></script>
+
     <link rel="stylesheet" type="text/css" href="index.css" />
 </head>
 <script type="text/javascript">
+
+    // create a network
     function draw() {
-        var config = {
-            container_id :"viz",
-            server_url : "bolt://localhost:7687",
-            server_user :"neo4j",
-            server_password : "hjklhjkl",
-
-            labels :{
-                "TACHE" : {
-                    "caption": "identifiant",
-
-
+        var container = document.getElementById("mynetwork");
+        var options = {
+            edges: {
+                arrows: {
+                    to: {enabled: true, scaleFactor: 0.75, type: 'arrow'}
                 },
-                "ENJEU" :{
-                    "caption": "identifiant",
-
-                    },
-                "TRANSITION" : {
-                    "caption": "identifiant",
-
+                color: {
+                    // color:'#848484',
+                    color: 'grey',
+                    highlight: 'red',
+                    hover: 'red',
+                    inherit: 'from',
+                    opacity: 1.0
                 },
-                "OBJECTIF" : {
-                    "caption": "identifiant",
-
-                },
-                "ACTION" : {
-                    "caption": "identifiant",
-
-                }
-
-
+                width: 2
             },
-            relationships : {
-                "LIEN": {
-                    "caption": "cout",
-                    //"thickness": "cout"
-                }
+            physics: {
+                barnesHut: {
+                    gravitationalConstant: -2000,
+                    centralGravity: 0.3,
+                    // springLength: 95,
+                    springLength: 500,
+                    springConstant: 0.01,
+                    damping: 0.09,
+                    avoidOverlap: 0
+                },
             },
-            arrows : true,
 
-
-
-            initial_cypher: "MATCH(n) OPTIONAL MATCH(c)-[r]->(a)  SET r.identifiant = id(r) RETURN n,r,c,a"
 
         }
 
-        viz = new NeoVis.default(config);
-        viz.render();
+
+        $.getJSON("doute.json")
+            .done(function (json) {
+                var data = {
+                    nodes: new vis.DataSet(json.nodes),
+                    edges: new vis.DataSet(json.edges)
+                }
+                console.log(json)
+
+                var network = new vis.Network(container, data, options);
+                network.on("click", function (params) {
+                    console.log(params.nodes)
+                    params.event = "[original event]";
+                    for (let i = 0; i < json.nodes.length; i++) {
+
+                        if (json.nodes[i].id == params.nodes) {
+                            document.getElementById("eventSpan").innerHTML =
+                                "<h2>Noeud sélectionné:</h2>" + " nom : " + json.nodes[i].nom +
+                                "\n label :" + json.nodes[i].label +
+                                "\n id : " + json.nodes[i].id +
+
+                                "\n<form method=\"post\" action=\"/supp/noeud\">" +
+                                "<input type=\"hidden\" name=\"id_a_supp\" id=\"coeur\"></label> <br>" +
+                                "<input type=\"submit\" name=\"Valider\" value=\"Supprimer le noeud\">" +
+                                "</form>"
+
+                                +"<form method=\"post\" action=\"/modif/noeud\">" +
+                                "<br><label id=\"champ_nom\" for=\"node_name\">Nom : </label>" +
+                                "<input type=\"text\" name=\"nom\" id=\"node_name\"> <br>" +
+                                "<input type=\"hidden\" name=\"id_a_modif\" id=\"modifier\"></label> <br>" +
+                                "<input type=\"submit\" name=\"Valider\" value=\"Modifier le noeud\">" +
+                                "</form>"
+
+                                + " <form method=\"post\" action=\"/creation/relation\">" +
+                                "<br>" +
+                                "<input type=\"text\" name=\"id1\" id=\"id_1\"> <br>" +
+                                "<input type=\"text\" name=\"id2\" id=\"id_2\"></label> <br>" +
+                                "<input type=\"button\" name=\"Valider\" id='creer' value=\"Creer lien\">" +
+                                "<input type=\"submit\" id='ok' name=\"Valider\" value=\"Confirmer" +"\">" +
+                                "\n<input type=\"radio\" id=\"1\"" +
+                                "name=\"cout\" value=\"1\">" +
+                                "<label for=\"1\">1</label>" +
+                                " \n<input type=\"radio\" id=\"2\"" +
+                                "name=\"cout\" value=\"2\">" +
+                                "<label for=\"2\">2</label>" +
+                                "\n" +
+                                "<input type=\"radio\" id=\"3\"" +
+                                "name=\"cout\" value=\"3\">" +
+                                "<label for=\"3\">3</label>" +
+                                "\n" +
+                                "<input type=\"radio\" id=\"4\"" +
+                                "name=\"cout\" value=\"4\">" +
+                                "<label for=\"4\">4</label>" +
+                                "\n" +
+                                "<input type=\"radio\" id=\"5\"" +
+                                "name=\"cout\" value=\"5\">" +
+                                "<label for=\"5\">5</label>\n" +
+                                "</form>"
+                            document.getElementById('ok').style.visibility = 'hidden';
+                            document.getElementById("coeur").value = params.nodes;
+                            document.getElementById("modifier").value = params.nodes;
+                            document.getElementById("node_name").value = json.nodes[i].nom;
+                            $("#creer").click(function () {
+                                let a = params.nodes
+                                network.on("click", function (set) {
+                                    document.getElementById("id_1").value = a;
+                                    for (let i = 0; i < json.nodes.length; i++) {
+
+                                        if (json.nodes[i].id == set.nodes) {
+                                            document.getElementById("id_2").value = set.nodes
+                                        }
+                                    }
+                                    document.getElementById('ok').style.visibility = 'visible';
+                                })
+                            })
+
+                        }
+                        for (let i = 0; i < json.edges.length; i++) {
+                            if (json.edges[i].id == params.edges && params.nodes.length==0) {
+                                console.log(params.nodes)
+                                document.getElementById("eventSpan").innerHTML =
+                                    "<h2>Relation sélectionnée:</h2>" +
+                                    " label :" + json.edges[i].label +
+                                    "\n id : " + json.edges[i].id + "\n <form method=\"post\" action=\"/supp/relation\">" +
+                                    "<input type=\"hidden\" name=\"rel_a_supp\" id=\"supp_rel\"></label> <br>" +
+                                    "<input type=\"submit\" name=\"Valider\" value=\"Supprimer la relation\">" +
+                                    "</form>"
+                                document.getElementById("supp_rel").value = params.edges;
+                                break
+
+                            }
+                        }
+                    }
+
+                })
+            })
     }
+
+
 </script>
+
+
+
+
 <div id="modif">
 <div id="creaNoeud">
 <h3> Créer un noeud </h3>
 <br>
-<form method="post" action="/ajout/noeud" onsubmit="return draw()">
+<form method="post" action="/ajout/noeud">
 
     <input type="radio" id="TACHE"
            name="noeud" value="TACHE">
@@ -95,74 +187,27 @@
 </form>
 </div>
 <br>
-<div id="creaLien">
-<h3>Création de relation</h3>
-<form method="post" action="/ajout/relation" onsubmit="return draw()">
-    <label id="depart">Identifiant du point de départ </label>
-    <input type="text" name="ptdepart">
-    <br>
-    <label id="arrivee">Identifiant du point d'arrivée   </label>
-    <input type="text" name="ptarr">
-    <br>
-    <input type="radio" id="1"
-           name="cout" value="1">
-    <label for="1">1</label>
-    <br>
 
-    <input type="radio" id="2"
-           name="cout" value="2">
-    <label for="2">2</label>
-    <br>
-    <input type="radio" id="3"
-           name="cout" value="3">
-    <label for="3">3</label>
-
-    <input id="ok_lien" type="submit" name="Valider">
-    <br>
-    <input type="radio" id="4"
-           name="cout" value="4">
-    <label for="4">4</label>
-    <br>
-    <input type="radio" id="5"
-           name="cout" value="5">
-    <label for="5">5</label>
-    <br>
-</form>
-</div>
-
-
-    <h3>Supprimer Noeud</h3>
-    <form method="post" action="/supp/noeud" onsubmit="return draw()">
-        <label id="suppnoeud">Identifiant du noeud à supprimer </label>
-        <input type="text" name="noeud_a_supprimer">
-        <input id="ok_supp_noeud" type="submit" name="Valider">
-    </form>
-
-    <h3>Supprimer Relation</h3>
-    <form method="post" action="/supp/relation" onsubmit="return draw()">
-        <label id="supprelation">Identifiant de la relation à supprimer </label>
-        <input type="text" name="rel_a_supprimer">
-     <input id="ok_supp_rel" type="submit" name="Valider">
-    </form>
-    <p > <a id="redirection"  href="/filtrer"> Filtrer le graphe</a></p>
 
     <h3> Ajout Enjeux</h3>
-    <form method="post" action="/import/enjeux" onsubmit="return draw()" enctype="multipart/form-data">
+    <form method="post" action="/import/enjeux" enctype="multipart/form-data">
     <input type="file" id="file_enjeux" name="Chosir un fichier" accept=".csv">
         <input id="ok_import_enjeux" type="submit" name="Valider">
     </form>
     <h3> Ajout Transitions</h3>
-    <form method="post" action="/import/transitions" onsubmit="return draw()" enctype="multipart/form-data">
+    <form method="post" action="/import/transitions" enctype="multipart/form-data">
         <input type="file" id="file_transitions" name="Chosir un fichier" accept=".csv">
         <input id="ok_import_transitions" type="submit" name="Valider">
     </form>
     <h3> Ajout Propositions</h3>
-    <form method="post" action="/import/propositions" onsubmit="return draw()" enctype="multipart/form-data">
+    <form method="post" action="/import/propositions"  enctype="multipart/form-data">
         <input type="file" id="file_propositions" name="Chosir un fichier" accept=".csv">
         <input id="ok_import_propositions" type="submit" name="Valider">
     </form>
 </div>
-<body onload ="draw()">
-<div id = "viz"></div>
+<body onload="draw()">
+<div id = "mynetwork"></div>
+<pre id="eventSpan">
+</pre>
 </body>
 </html>

@@ -8,13 +8,14 @@
             crossorigin="anonymous"></script>
     <style type="text/css">
         #mynetwork {
-            width: 1000px;
-            height: 1000px;
+            width: 800px;
+            height: 800px;
             float: left;
             border: 1px solid lightgray;
         }
         #eventSpan{
             font: 10pt Arial;
+            border: 1px solid lightgray;
         }
     </style>
 </head>
@@ -24,22 +25,7 @@
 <script type="text/javascript">
 
     // create an array with edges
-    var nodes = new vis.DataSet([
-        { id: 1, label: "Node 1" },
-        { id: 2, label: "Node 2" },
-        { id: 3, label: "Node 3" },
-        { id: 4, label: "Node 4" },
-        { id: 5, label: "Node 5" }
-    ]);
 
-    // create an array with edges
-    var edges = new vis.DataSet([
-        { from: 1, to: 3 },
-        { from: 1, to: 2 },
-        { from: 2, to: 4 },
-        { from: 2, to: 5 },
-        { from: 3, to: 3 }
-    ]);
 
     // create a network
     var container = document.getElementById("mynetwork");
@@ -75,7 +61,7 @@
 
 
 
-            $.getJSON("data.json")
+            $.getJSON("../data.json")
                 .done(function(json){
                     var data ={
                         nodes: new vis.DataSet(json.nodes),
@@ -95,11 +81,6 @@
                     });
                 })
 
-
-
-
-
-    //var network = new vis.Network(container, data, options);
 
 
 
