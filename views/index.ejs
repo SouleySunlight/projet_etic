@@ -1,7 +1,9 @@
 
 <!doctype html>
+
 <html>
 <head>
+    <meta charset="utf-8">
     <title> Visualisation graphe </title>
     <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
     <script src="https://code.jquery.com/jquery-2.2.4.js"
@@ -10,6 +12,13 @@
 
 
     <link rel="stylesheet" type="text/css" href="index.css" />
+    <script type="text/javascript">
+        function openWin(url){
+            newwin=window.open(url,'','width=400,height=400,top=200,left=200');
+            if(newwin){
+                window.onfocus=function(){newwin.window.close()}
+            }
+        }</script>
 </head>
 <script type="text/javascript">
 
@@ -33,10 +42,10 @@
             },
             physics: {
                 barnesHut: {
-                    gravitationalConstant: -2000,
-                    centralGravity: 0.3,
+                    gravitationalConstant: -500,
+                    centralGravity:0.1,
                     // springLength: 95,
-                    springLength: 500,
+                    springLength: 750,
                     springConstant: 0.01,
                     damping: 0.09,
                     avoidOverlap: 0
@@ -63,18 +72,38 @@
 
                         if (json.nodes[i].id == params.nodes) {
                             document.getElementById("eventSpan").innerHTML =
-                                "<h2>Noeud sélectionné:</h2>" + " nom : " + json.nodes[i].nom +
-                                "\n label :" + json.nodes[i].label +
-                                "\n id : " + json.nodes[i].id +
+                                "<h2>Noeud sélectionné:</h2>" + "<b> Nom :</b> " + json.nodes[i].nom +
+                                "\n <b>Type:</b> " + json.nodes[i].type +
+                                "\n <b>ID:</b>  " + json.nodes[i].id +
+                                "\n <b>Quoi :</b> " + json.nodes[i].quoi +
+                                "\n <b>Pourquoi :</b> " + json.nodes[i].pourquoi +
+                                "\n <b> Qui :</b> " + json.nodes[i].qui +
+                                "\n <b> Quand :</b> " + json.nodes[i].quand +
+                                "\n <b> Comment: </b> " + json.nodes[i].comment +
+                                "\n <b> Qui :</b>" + json.nodes[i].qui +
+                                "\n <b> Plus :</b> " + json.nodes[i].plus +
+                                "\n <b> Moins :</b> " + json.nodes[i].moins +
+                                "\n <b> Proposition de:</b> " + json.nodes[i].proposeur +
+                                "\n <b> Attachement: </b> " + json.nodes[i].attachement +
+                                "\n <b> Remarques: </b>  " + json.nodes[i].remarques +
+                                "\n <b> Complexité: </b>  " + json.nodes[i].z1 +
+                                "\n <b> Niveau de maîtrise interne: </b>  " + json.nodes[i].z2 +
+                                "\n <b> Temporalité de deploiement: </b>  " + json.nodes[i].z3 +
+                                "\n <b> Périmètre concerné: </b>  " + json.nodes[i].z4 +
+                                "\n <b> Coût: </b>  " + json.nodes[i].z5 +
+                                "\n <b> Energie globale: </b>  " + json.nodes[i].z6 +
+                                "\n <b> Risque ressenti: </b>  " + json.nodes[i].z7 +
+                                "\n <b> Bénéfice attendu: </b>  " + json.nodes[i].z8 +
+                                "\n <b> Caractère mobilisateur: </b>  " + json.nodes[i].z9 +
+                                "\n <b> Caractère novateur: </b>  " + json.nodes[i].z10 +
 
-                                "\n<form method=\"post\" action=\"/supp/noeud\">" +
-                                "<input type=\"hidden\" name=\"id_a_supp\" id=\"coeur\"></label> <br>" +
+
+                            "\n<form method=\"post\" action=\"/supp/noeud\">" +
+                                "<input type=\"hidden\" name=\"id_a_supp\" id=\"coeur\"><br>" +
                                 "<input type=\"submit\" name=\"Valider\" value=\"Supprimer le noeud\">" +
                                 "</form>"
 
-                                +"<form method=\"post\" action=\"/modif/noeud\">" +
-                                "<br><label id=\"champ_nom\" for=\"node_name\">Nom : </label>" +
-                                "<input type=\"text\" name=\"nom\" id=\"node_name\"> <br>" +
+                                +"<form method=\"post\" action=\"/vue/modif\">" +
                                 "<input type=\"hidden\" name=\"id_a_modif\" id=\"modifier\"></label> <br>" +
                                 "<input type=\"submit\" name=\"Valider\" value=\"Modifier le noeud\">" +
                                 "</form>"
@@ -103,15 +132,24 @@
                                 "<input type=\"radio\" id=\"5\"" +
                                 "name=\"cout\" value=\"5\">" +
                                 "<label for=\"5\">5</label>\n" +
+                                "</form>"+
+
+
+
+                                "<form method=\"post\" action=\"/filtrer\">" +
+                                "<input type=\"hidden\" name=\"noeud_a_filtrer\" id=\"filtrer\"> <br>" +
+                                "<input type=\"submit\" name=\"Valider\" value=\"Filtrer\">" +
                                 "</form>"
                             document.getElementById('ok').style.visibility = 'hidden';
                             document.getElementById("coeur").value = params.nodes;
+                            document.getElementById("filtrer").value = params.nodes;
                             document.getElementById("modifier").value = params.nodes;
-                            document.getElementById("node_name").value = json.nodes[i].nom;
+
                             $("#creer").click(function () {
                                 let a = params.nodes
                                 network.on("click", function (set) {
                                     document.getElementById("id_1").value = a;
+                                    console.log(a)
                                     for (let i = 0; i < json.nodes.length; i++) {
 
                                         if (json.nodes[i].id == set.nodes) {
@@ -151,41 +189,13 @@
 
 
 <div id="modif">
-<div id="creaNoeud">
-<h3> Créer un noeud </h3>
-<br>
-<form method="post" action="/ajout/noeud">
 
-    <input type="radio" id="TACHE"
-           name="noeud" value="TACHE">
-    <label for="TACHE">Tâche</label>
-    <br>
 
-    <input type="radio" id="ACTION"
-           name="noeud" value="ACTION">
-    <label for="ACTION">Action</label>
-    <br>
-    <input type="radio" id="OBJECTIF"
-           name="noeud" value="OBJECTIF">
-    <label for="OBJECTIF">Objectif</label>
-
-    <label id="champ_nom"> Nom </label>
-    <input type="text" name="name">
-
-    <input type="submit" name="Valider">
-    <br>
-    <input type="radio" id="ENJEU"
-           name="noeud" value="ENJEU">
-    <label for="ENJEU">Enjeu</label>
-    <br>
-    <input type="radio" id="TRANSITION"
-           name="noeud" value="TRANSITION">
-    <label for="TRANSITION">Transition</label>
+    <a id ="redir" href="/vue/creation"> Créer un noeud </a>
 
 
 
-</form>
-</div>
+
 <br>
 
 
@@ -204,6 +214,11 @@
         <input type="file" id="file_propositions" name="Chosir un fichier" accept=".csv">
         <input id="ok_import_propositions" type="submit" name="Valider">
     </form>
+    <form method="post" action="/reinit"><br>
+        <input id="reinitialiser" type="submit" name="Valider" value="Réinitialiser">
+    </form>
+    <form method="post" action="/download">
+   <input id="dl" type="submit" value="Télécharger en CSV"> </form>
 </div>
 <body onload="draw()">
 <div id = "mynetwork"></div>

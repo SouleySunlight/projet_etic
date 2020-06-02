@@ -11,10 +11,14 @@ html, body {
     width: 1200px;
     height: 1000px;
     float: left;
+
+
 }
 #eventSpan{
     font: 10pt Arial;
     color: black;
+    white-space : pre-wrap;
+
 }
 #champ_nom {
     padding-left: 3rem;
@@ -22,14 +26,11 @@ html, body {
 #ok_lien{
     margin-left: 5rem;
 }
-#creaLien{
-    float: left;
-    margin-left: 2rem;
-    margin-right: 2rem;
-    margin-bottom: 2rem;
-}
-#creaNoeud{
-    float: left;
+
+#redir{
+    color: mediumpurple;
+    font: 12pt Arial;
+    font-weight: bold;
 }
 #modif{
     background-color: #204051;
@@ -37,8 +38,11 @@ html, body {
 }
 h3{
     text-decoration: underline;
+
 }
-#redirection{
-    color: #cae8d5;
+#reinitialiser{
+    float: left;
+    margin-right: 2rem;
 }
+
 

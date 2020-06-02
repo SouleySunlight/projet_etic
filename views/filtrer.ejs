@@ -1,225 +1,272 @@
-<!doctype html>
 <html>
 <head>
-    <title> Visualisation graphe </title>
+    <style>
+        #Saut
+        {
+            display: block;
+            width: 250px;
+            font: 10pt Arial;
+            float: left;
 
-    <script src="https://cdn.neo4jlabs.com/neovis.js/v1.4.0/neovis.js"></script>
-    <link rel="stylesheet" type="text/css" href="filtrer.css" />
-    <script src="https://code.jquery.com/jquery-3.5.1.js"
-            integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
-            crossorigin="anonymous"></script>
+        }
+        h3{font: 12pt Arial}
+        #lien{
+            float: left;
+            width: 250px;
+            font: 10pt Arial;
+        }
+        #ok{float: none}
+        #complexite{
+            display: block;
+            width: 250px;
+            font: 10pt Arial;
+            float: left;
+        }
+        #ndmi{
+            display: block;
+            width: 250px;
+            font: 10pt Arial;
+            float: left;}
+        #tdd{
+            display: block;
+            width: 250px;
+            font: 10pt Arial;
+            float: left;}
+        #pc{
+            display: block;
+            width: 250px;
+            font: 10pt Arial;
+            float: left ;
+            }
+        #cout{
+            display: block;
+            width: 250px;
+            font: 10pt Arial;
 
+        }
+        #rr{
+            display: block;
+            width: 250px;
+            font: 10pt Arial;
+            float: left;}
+        #ba{
+            display: block;
+            width: 250px;
+            font: 10pt Arial;
+            float: left;}
+        #eg{
+            display: block;
+            width: 250px;
+            font: 10pt Arial;
+            float: left;}
+        #cn{
+            display: block;
+            width: 250px;
+            font: 10pt Arial;
+            float: left;}
+        #cm{
+            display: block;
+            width: 250px;
+            font: 10pt Arial;
+            float: left;
+         }
+
+
+
+    </style>
 </head>
+<div id="Saut">
+    <h3> Filtre sur un nombre de lien :</h3>
+<form method="post" action="/filtrer/noeud">
+    <input type="radio" id="1"
+           name="saut" value="1">
+    <label for="1">1</label>
+    <br>
+
+    <input type="radio" id="2"
+           name="saut" value="2">
+    <label for="2">2</label>
+    <br>
+    <input type="radio" id="3"
+           name="saut" value="3">
+    <label for="3">3</label>
 
 
+    <br>
+    <input type="radio" id="4"
+           name="saut" value="4">
+    <label for="4">4</label>
+    <br>
+    <input type="radio" id="5"
+           name="saut" value="5">
+    <label for="5">5</label>
+
+</div>
+<div id="lien">
+    <h3> Coût des liens:</h3>
+    <input type="checkbox" name="cout1" value="1" /> 1
+    <br>
+    <input type="checkbox" name="cout2" value="2" /> 2
+    <br>
+    <input type="checkbox" name="cout3" value="3" /> 3
+    <br>
+    <input type="checkbox" name="cout4" value="4" /> 4
+    <br>
+    <input type="checkbox" name="cout5" value="5" /> 5
+</div>
+<div id="complexite">
+    <h3> Complexité:</h3>
+    <input type="checkbox" name="comp1" value="1" /> 1
+    <br>
+    <input type="checkbox" name="comp2" value="2" /> 2
+    <br>
+    <input type="checkbox" name="comp3" value="3" /> 3
+    <br>
+    <input type="checkbox" name="comp4" value="4" /> 4
+    <br>
+    <input type="checkbox" name="comp5" value="5" /> 5
+
+
+</div>
+<div id="ndmi">
+    <h3> Niveau de maîtrise interne:</h3>
+    <input type="checkbox" name="ndmi1" value="1" /> 1
+    <br>
+    <input type="checkbox" name="ndmi2" value="2" /> 2
+    <br>
+    <input type="checkbox" name="ndmi3" value="3" /> 3
+    <br>
+    <input type="checkbox" name="ndmi4" value="4" /> 4
+    <br>
+    <input type="checkbox" name="ndmi5" value="5" /> 5
+
+
+</div>
+<div id="tdd">
+    <h3> Temporalité de déploiement:</h3>
+    <input type="checkbox" name="tdd1" value="1" /> 1
+    <br>
+    <input type="checkbox" name="tdd2" value="2" /> 2
+    <br>
+    <input type="checkbox" name="tdd3" value="3" /> 3
+    <br>
+    <input type="checkbox" name="tdd4" value="4" /> 4
+    <br>
+    <input type="checkbox" name="tdd5" value="5" /> 5
+
+
+</div>
+
+<div id="pc">
+    <h3> Périmètre concerné:</h3>
+    <input type="checkbox" name="pc1" value="1" /> 1
+    <br>
+    <input type="checkbox" name="pc2" value="2" /> 2
+    <br>
+    <input type="checkbox" name="pc3" value="3" /> 3
+    <br>
+    <input type="checkbox" name="pc4" value="4" /> 4
+    <br>
+    <input type="checkbox" name="pc5" value="5" /> 5
+
+
+</div>
+
+<div id="cout">
+    <h3> Coût:</h3>
+    <input type="checkbox" name="cout1" value="1" /> 1
+    <br>
+    <input type="checkbox" name="cout2" value="2" /> 2
+    <br>
+    <input type="checkbox" name="cout3" value="3" /> 3
+    <br>
+    <input type="checkbox" name="cout4" value="4" /> 4
+    <br>
+    <input type="checkbox" name="cout5" value="5" /> 5
+
+
+</div>
+<div id="eg">
+    <h3> Energie globale:</h3>
+    <input type="checkbox" name="eg1" value="1" /> 1
+    <br>
+    <input type="checkbox" name="eg2" value="2" /> 2
+    <br>
+    <input type="checkbox" name="eg3" value="3" /> 3
+    <br>
+    <input type="checkbox" name="eg4" value="4" /> 4
+    <br>
+    <input type="checkbox" name="eg5" value="5" /> 5
+
+
+</div>
+<div id="rr">
+    <h3> Risque ressenti:</h3>
+    <input type="checkbox" name="rr1" value="1" /> 1
+    <br>
+    <input type="checkbox" name="rr2" value="2" /> 2
+    <br>
+    <input type="checkbox" name="rr3" value="3" /> 3
+    <br>
+    <input type="checkbox" name="rr4" value="4" /> 4
+    <br>
+    <input type="checkbox" name="rr5" value="5" /> 5
+
+
+</div>
+<div id="ba">
+    <h3> Bénéfice attendu:</h3>
+    <input type="checkbox" name="ba1" value="1" /> 1
+    <br>
+    <input type="checkbox" name="ba2" value="2" /> 2
+    <br>
+    <input type="checkbox" name="ba3" value="3" /> 3
+    <br>
+    <input type="checkbox" name="ba4" value="4" /> 4
+    <br>
+    <input type="checkbox" name="ba5" value="5" /> 5
+
+
+</div>
+<div id="cn">
+    <h3> Caractère novateur:</h3>
+    <input type="checkbox" name="cn1" value="1" /> 1
+    <br>
+    <input type="checkbox" name="cn2" value="2" /> 2
+    <br>
+    <input type="checkbox" name="cn3" value="3" /> 3
+    <br>
+    <input type="checkbox" name="cn4" value="4" /> 4
+    <br>
+    <input type="checkbox" name="cn5" value="5" /> 5
+
+
+</div>
+<div id="cm">
+    <h3> Caractère mobilisateur:</h3>
+    <input type="checkbox" name="cm1" value="1" /> 1
+    <br>
+    <input type="checkbox" name="cm2" value="2" /> 2
+    <br>
+    <input type="checkbox" name="cm3" value="3" /> 3
+    <br>
+    <input type="checkbox" name="cm4" value="4" /> 4
+    <br>
+    <input type="checkbox" name="cm5" value="5" /> 5
+
+
+</div>
+
+
+<br><br><br>
+<input type="hidden" id="id_noeud" name="noeud">
+<input type="submit" name="valider" id="ok">
+</form>
 <script type="text/javascript">
-    var filtre = 'MATCH(n) OPTIONAL MATCH(c)-[r]->(a) SET n.identifiant= id(n) SET r.identifiant = id(r) RETURN n,r,c,a';
-    var viz;
+    let a = <%=noeud%>
+        document.getElementById("id_noeud").value = a;
 
-
-    function aff() {
-        draw_filtrer(filtre)
-
-    };
-    function draw_filtrer(a) {
-        var config = {
-            container_id :"viz",
-            server_url : "bolt://localhost:7687",
-            server_user :"neo4j",
-            server_password : "hjklhjkl",
-
-            labels :{
-                "TACHE" : {
-                    "caption": "nom"
-
-                },
-                "ENJEU" :{
-                    "caption": "nom",
-
-                },
-                "TRANSITION" : {
-                    "caption": "nom",
-
-
-                },
-                "OBJECTIF" : {
-                    "caption": "nom",
-
-                },
-                "ACTION" : {
-                    "caption": "nom",
-                    
-                }
-
-
-            },
-            relationships : {
-                "LIEN": {
-                    "caption": "cout",
-                    "thickness": "cout"
-                }
-            },
-            arrows : true,
-
-
-
-            initial_cypher: a,
-
-        }
-        viz = new NeoVis.default(config);
-        viz.render();
-    }
 </script>
 
 
-<div id="zone">
-        <div id="typeNoeud">
-            <h3>Filtrer un type de noeud</h3>
-        <label> Quels noeuds afficher ? </label>
-        <br>
-        <input type="radio" id="TOUT"
-               name="noeud" value="TOUT">
-        <label for="TOUT">Tout</label>
-        <br>
-        <input type="radio" id="TACHE"
-               name="noeud" value="TACHE">
-        <label for="TACHE">Tâche</label>
-        <br>
-
-        <input type="radio" id="ACTION"
-               name="noeud" value="ACTION">
-        <label for="ACTION">Action</label>
-        <br>
-        <input type="radio" id="OBJECTIF"
-               name="noeud" value="OBJECTIF">
-        <label for="OBJECTIF">Objectif</label>
-
-        <br>
-        <input type="radio" id="ENJEU"
-               name="noeud" value="ENJEU">
-        <label for="ENJEU">Enjeu</label>
-        <br>
-        <input type="radio" id="TRANSITION"
-               name="noeud" value="TRANSITION">
-        <label for="TRANSITION">Transition</label>
-
-        </div>
-
-<div id="degre">
-    <label> Degré de relation ? </label>
-    <br>
-
-    <input type="radio" id="1"
-           name="deg" value="1">
-    <label for="1">1</label>
-    <br>
-
-    <input type="radio" id="2"
-           name="deg" value="2">
-    <label for="2">2</label>
-    <br>
-    <input type="radio" id="3"
-           name="deg" value="3">
-    <label for="3">3</label>
-
-    <br>
-    <input type="radio" id="4"
-           name="deg" value="4">
-    <label for="4">4</label>
-    <br>
-    <input type="radio" id="AUTRE"
-           name="deg" value="AUTRE">
-    <label for="AUTRE">Autre</label>
-    <input type="text" id="choix">
-    <input type="button" value="Filtrer" id="filtrage_noeud">
-
-</div>
-
-<div id="zoom_noeud">
-    <h3>Filtrer sur un noeud précis</h3>
-    <label> Identifiant du noeud à centrer</label>
-    <input type="text" id="node">
-    <br>
-
-    <label> Degré de relation ? </label>
-    <br>
-
-    <input type="radio" id="1"
-           name="degre" value="1">
-    <label for="1">1</label>
-    <br>
-
-    <input type="radio" id="2"
-           name="degre" value="2">
-    <label for="2">2</label>
-    <br>
-    <input type="radio" id="3"
-           name="degre" value="3">
-    <label for="3">3</label>
-
-    <br>
-    <input type="radio" id="4"
-           name="degre" value="4">
-    <label for="4">4</label>
-    <br>
-    <input type="radio" id="AUTRE"
-           name="degre" value="AUTRE">
-    <label for="AUTRE">Autre</label>
-    <input type="text" id="choix">
-    <input type="button" value="Filtrer" id="zoom">
-    <p id="Retour"> <a id="redir" href="/"> Retourner à la page d'accueil</a></p>
-
-</div>
-
-
-
-
-</div>
-
-<body onload ="aff()">
-<script>
-    $("#zoom").click(function() {
-        var res= $('#node').val();
-        var degre = $('input[name=degre]:checked').val();
-
-
-            if(degre == "AUTRE"){
-                autre = $("#choix").val();
-                filtre = 'MATCH(n)  WHERE n.identifiant=' + res +' OPTIONAL MATCH(c)-[r:LIEN*1..'+ autre +']->(a) WHERE  c.identifiant=' + res + ' OPTIONAL MATCH(x)-[y:LIEN*1..'+ autre +']->(z) WHERE  z.identifiant=' + res +' return n, c, r, a,x,y,z   ';
-            }
-
-            else{
-                filtre = 'MATCH(n)  WHERE n.identifiant=' + res +' OPTIONAL MATCH(c)-[r:LIEN*1..'+ degre +']->(a) WHERE  c.identifiant=' + res + ' OPTIONAL MATCH(x)-[y:LIEN*1..'+ degre +']->(z) WHERE  z.identifiant=' + res + ' return n, c, r, a, x, y, z';
-            }
-
-
-        alert(filtre)
-        aff();
-    });
-</script>
-<script>
-    $("#filtrage_noeud").click(function() {
-        var res= $('input[name=noeud]:checked').val();
-        var degre = $('input[name=deg]:checked').val();
-
-        if(res == "TOUT"){
-            filtre = 'MATCH(n) OPTIONAL MATCH(c)-[r]->(a) RETURN n,r,c,a';
-        }
-        else {
-            if(degre == "AUTRE"){
-                autre = $("#choix").val();
-                filtre = 'MATCH(n:' + res + ') OPTIONAL MATCH(c:' + res + ')-[r:LIEN*1..'+ autre +']->(a) return n, c, r, a';
-            }
-
-            else{
-                filtre = 'MATCH(n:' + res + ') OPTIONAL MATCH(c:' + res + ')-[r:LIEN*1..'+degre+']->(a) return n, c, r, a';
-            }
-
-        }
-
-        aff();
-    });
-</script>
-<div id = "viz"></div>
-</body>
 </html>
