@@ -1,0 +1,148 @@
+<html>
+<head>
+    <style>
+        #Champ
+        {
+            display: block;
+            width: 150px;
+
+        }
+        input
+        {
+            width: 1000px;
+            height: 2rem;
+            text-align: left;
+            white-space : pre-wrap;
+        }
+        #validation{
+            width: 65px;
+
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-2.2.4.js"
+            integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI="
+            crossorigin="anonymous"></script>
+</head>
+<h1><%= data.proposeur %></h1>
+
+<form method="post" action="/modif/noeud">
+
+
+    <div id="Champ"/>
+    <br><br>
+    <label id="champ_nom"> Nom </label>
+    <input id="text_nom" type="text" name="name">
+    <label id="champ_quoi"> Quoi? </label>
+    <input id="text_quoi" type="text" name="quoi">
+
+    <br>
+    <label id="champ_pourquoi"> Pourquoi? </label>
+    <input id="text_why" type="text" name="pourquoi">
+    <br>
+    <label id="champ_qui"> Qui? </label>
+    <input id="text_qui" type="text" name="qui">
+    <br>
+    <label id="champ_quand"> Quand? </label>
+    <input id="text_quand" type="text" name="quand">
+    <br>
+    <label id="champ_comment"> Comment? </label>
+    <input id="text_com" type="text" name="comment">
+    <br>
+    <label id="champ_plus"> Plus </label>
+    <input id="text_plus" type="text" name="plus">
+    <br>
+    <label id="champ_moins"> Moins </label>
+    <input id="text_moins" type="text" name="moins">
+    <br>
+    <label id="champ_proposeur"> Proposition de  </label>
+    <input id="text_prop" type="text" name="proposeur">
+    <br>
+    <label id="champ_remarque"> Remarques </label>
+    <input id="text_rem" type="text" name="remarque">
+    <br>
+    <label id="champ_attachement"> Attachements </label>
+    <input id="text_att" type="text" name="attachements">
+
+    <label> Complexité </label>
+    <input id="z1" type="text" name="z1">
+    <br>
+    <br>
+    <label> Niveau de maîtrise interne </label>
+    <input id="z2" type="text" name="z2">
+    <br>
+    <br>
+    <label > Temporalité de déploiement </label>
+    <input id="z3" type="text" name="z3">
+    <br>
+    <br>
+    <label > Périmètre concerné </label>
+    <input type="text" id="z4" name="z4">
+    <br>
+    <br>
+    <label> Coût </label>
+    <input type="text" name="z5" id="z5">
+    <br>
+    <br>
+    <label> Energie globale </label>
+    <input type="text" name="z6" id="z6">
+    <br>
+    <br>
+    <label> Risque ressenti </label>
+    <input type="text" name="z7" id="z7">
+    <br>
+    <br>
+    <label> Bénéfice attendu </label>
+    <input type="text" name="z8" id="z8">
+    <br>
+    <br>
+    <label> Caractère mobilisateur </label>
+    <input type="text" name="z9" id="z9">
+    <br>
+    <br>
+    <label> Caractère novateur </label>
+    <input type="text" name="z10" id="z10">
+    <br>
+
+    <input type="hidden" id="id" name="noeud">
+    <br>
+    <input type="submit" name="Valider" id="validation">
+
+<script type="text/javascript">
+                var id = <%=data.noeud%>
+                    $.getJSON("../doute.json")
+                        .done(function (json) {
+                            for (let i = 0; i < json.nodes.length; i++) {
+                                if (json.nodes[i].id == id) {
+                                    document.getElementById("text_att").value = json.nodes[i].attachement;
+                                    document.getElementById("text_rem").value = json.nodes[i].remarques;
+                                    document.getElementById("text_prop").value = json.nodes[i].proposeur;
+                                    document.getElementById("text_plus").value = json.nodes[i].plus;
+                                    document.getElementById("text_moins").value = json.nodes[i].moins;
+                                    document.getElementById("text_why").value = json.nodes[i].pourquoi;
+                                    document.getElementById("text_qui").value = json.nodes[i].qui;
+                                    document.getElementById("text_quoi").value = json.nodes[i].quoi;
+                                    document.getElementById("text_com").value = json.nodes[i].comment;
+                                    document.getElementById("text_quand").value = json.nodes[i].quand;
+                                    document.getElementById("text_nom").value = json.nodes[i].nom;
+                                    document.getElementById("z1").value = json.nodes[i].z1;
+                                    document.getElementById("z2").value = json.nodes[i].z2;
+                                    document.getElementById("z3").value = json.nodes[i].z3;
+                                    document.getElementById("z4").value = json.nodes[i].z4;
+                                    document.getElementById("z5").value = json.nodes[i].z5;
+                                    document.getElementById("z6").value = json.nodes[i].z6;
+                                    document.getElementById("z7").value = json.nodes[i].z7;
+                                    document.getElementById("z8").value = json.nodes[i].z8;
+                                    document.getElementById("z9").value = json.nodes[i].z9;
+                                    document.getElementById("z10").value = json.nodes[i].z10;
+
+                                    document.getElementById("id").value = id;
+
+                                }
+                            }
+
+                        })
+
+
+
+</script>
+</html>
