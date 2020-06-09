@@ -219,7 +219,10 @@
     <form method="get" action="/download">
    <input id="dl" type="submit" value="Télécharger en CSV"> </form>
     <br>
-    <button class="tous_supp" type="button">Supprimer toutes les données</button>
+    <button class="tous_supp" type="button" id="supp_bouton">Supprimer toutes les données</button>
+    <form method="post" action="/deco">
+        <input id="deco" type="submit" value="Se déconnecter"> </form>
+
 </div>
 <script>
     $('.tous_supp').click(function () {

@@ -303,6 +303,10 @@ app.get('/vue/creation',cas.bounce, function(req,res) {
 
     res.render('crea_noeud');
 });
+    app.get('/undefined', function (res,res) {
+        res.redirect('/')
+
+    })
 app.post('/vue/modif', function(req,res) {
     var noeud = req.body.id_a_modif
 
@@ -358,7 +362,7 @@ app.post('/ajout/noeud', function(req, res){
     session
         .run('CREATE(n:' + nature + ' {nom : $nameParam, identifiant:"",attachement:$attachementsParam, comment:$commentParam, moins:$moinsParam, plus:$plusParam, pourquoi:$pourquoiParam, proposeur:$proposeurParam,' +
             'quand: $quandParam, qui: $quiParam, quoi:$quoiParam, remarques:$remarquesParam, z1:$z1Param, z2:$z2Param, z3:$z3Param, z4:$z4Param, z5:$z5Param, z6:$z6Param' +
-            ', z7:$z7Param, z8:$z8Param, z9:$z9Param, z10:$z10Param, type:\"'+nature+'\"}) RETURN n.nom',{nameParam: name, attachementsParam: attachements, commentParam:comment,
+            ', z7:$z7Param, z8:$z8Param, z9:$z9Param, z10:$z10Param}) RETURN n.nom',{nameParam: name, attachementsParam: attachements, commentParam:comment,
         moinsParam: moins, plusParam:plus, pourquoiParam:pourquoi, proposeurParam : proposeur, quandParam : quand, quiParam: qui,
        quoiParam :quoi, remarquesParam : remarque, z1Param:z1, z2Param:z2,z3Param:z3, z4Param:z4, z5Param:z5, z6Param:z6, z7Param:z7, z8Param:z8, z9Param:z9, z10Param:z10 })
 
@@ -524,6 +528,7 @@ app.post('/reinit', function(req, res){
         })
     },1000)
 })
+app.post('/deco',cas.logout)
 
 app.post('/filtrer/noeud', function(req,res){
     var noeud = req.body.noeud;
