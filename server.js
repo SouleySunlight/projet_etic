@@ -4,8 +4,15 @@ var path =require('path')
 var bodyParser=require('body-parser');
 var fs = require('fs');
 var multer = require('multer');
-var encoding = require('encoding')
+var sess = require('express-session');
+var CASAuthentification = require('cas-authentication');
+
 var chemin = '../neo4j-community-4.0.4/import/all.csv';
+
+var cas = new CASAuthentification({
+    cas_url     : 'https://llng-auth-dev.insa-lyon.fr/cas',
+    service_url : 'http://localhost:8080'
+});
 
 var app = express();
 var driver = neo4j.driver( 'bolt://localhost:7687', neo4j.auth.basic('neo4j', 'hjklhjkl'));
@@ -16,6 +23,12 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: 'false'}));
 app.use(express.static(__dirname + '/views'));
+
+app.use(sess({
+    secret            : 'super secret key',
+    resave            : false,
+    saveUninitialized : true
+}));
 
 let upload = multer({dest: 'Uploads/'});
 
@@ -266,9 +279,27 @@ let upload = multer({dest: 'Uploads/'});
     }
 
 
+app.post('/tous_supp', function (req,res) {
+session
+    .run('MATCH (n) DETACH DELETE n')
+    .then(function(){
+        console.log("je refresh")
+        refresh_csv(function () {
+            setTimeout(function(){
+                refresh_json(function () {
+                    res.redirect('/')
+                })
+            },300)
 
+        });
 
-app.get('/vue/creation', function(req,res) {
+    })
+    .catch(function(err){
+        console.log(err);
+    })
+})
+
+app.get('/vue/creation',cas.bounce, function(req,res) {
 
     res.render('crea_noeud');
 });
@@ -279,11 +310,11 @@ app.post('/vue/modif', function(req,res) {
     res.render('modif_noeud', {data: {noeud: noeud}})
 })
 
-app.get('/', function(req,res){
+app.get('/', cas.bounce, function(req,res){
            res.render('index');
 
 });
-app.post('/download', function(req,res){
+app.get('/download',cas.bounce, function(req,res){
     res.download(chemin, "content.csv", function (err) {
 console.log(err)
     })
@@ -1012,7 +1043,7 @@ app.post('/import/enjeux', upload.single("Chosir un fichier"), function(req, res
     });
 
 });
-app.post('/import/transitions', upload.single("Chosir un fichier"), function(req, res) {
+app.post('/import/transitions' ,upload.single("Chosir un fichier"), function(req, res) {
     var file = req.file;
     lien = file.path;
     let result = "";
@@ -1057,7 +1088,7 @@ app.post('/import/transitions', upload.single("Chosir un fichier"), function(req
         },1000)
     })
 })
-app.post('/import/propositions', upload.single("Chosir un fichier"), function (req, res) {
+app.post('/import/propositions',upload.single("Chosir un fichier"), function (req, res) {
         var file = req.file;
         lien = file.path;
         let result = "";

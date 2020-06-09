@@ -18,6 +18,8 @@
     "neo4j-driver": "*",
     "vis": "*",
     "utf8": "*",
-    "encoding": "*"
+    "encoding": "*",
+    "cas-authentication": "*",
+    "express-session": "*"
   }
 }

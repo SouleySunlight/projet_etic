@@ -182,7 +182,6 @@
             })
     }
 
-
 </script>
 
 
@@ -217,9 +216,22 @@
     <form method="post" action="/reinit"><br>
         <input id="reinitialiser" type="submit" name="Valider" value="Réinitialiser">
     </form>
-    <form method="post" action="/download">
+    <form method="get" action="/download">
    <input id="dl" type="submit" value="Télécharger en CSV"> </form>
+    <br>
+    <button class="tous_supp" type="button">Supprimer toutes les données</button>
 </div>
+<script>
+    $('.tous_supp').click(function () {
+        if(confirm("Etes vous sûr de vouloir supprimer toutes les données ?\n Cette action est irréversible")) {
+            $.post('/tous_supp')
+            setTimeout(function(){
+                location.reload()},1000)
+            }
+
+        }
+    )
+</script>
 <body onload="draw()">
 <div id = "mynetwork"></div>
 <pre id="eventSpan">
