@@ -170,8 +170,33 @@
                                     "\n id : " + json.edges[i].id + "\n <form method=\"post\" action=\"/supp/relation\">" +
                                     "<input type=\"hidden\" name=\"rel_a_supp\" id=\"supp_rel\"></label> <br>" +
                                     "<input type=\"submit\" name=\"Valider\" value=\"Supprimer la relation\">" +
+                                    "</form>" +
+
+
+                                    "\n Modifier le coût du lien :  "+"<form method=\"post\" action=\"/modif/relation\">" +
+                                    "<input type=\"hidden\" name=\"rel_a_modif\" id=\"modif_rel\"></label> <br>" +
+                                   " <input type=\"radio\" id=\"1\"" +
+                                "name=\"cout\" value=\"1\">" +
+                                "<label for=\"1\">1</label>" +
+                                " \n<input type=\"radio\" id=\"2\"" +
+                                "name=\"cout\" value=\"2\">" +
+                                "<label for=\"2\">2</label>" +
+                                "\n" +
+                                "<input type=\"radio\" id=\"3\"" +
+                                "name=\"cout\" value=\"3\">" +
+                                "<label for=\"3\">3</label>" +
+                                "\n" +
+                                "<input type=\"radio\" id=\"4\"" +
+                                "name=\"cout\" value=\"4\">" +
+                                "<label for=\"4\">4</label>" +
+                                "\n" +
+                                "<input type=\"radio\" id=\"5\"" +
+                                "name=\"cout\" value=\"5\">" +
+                                "<label for=\"5\">5</label>\n" +
+                                    "<input type=\"submit\" name=\"Valider\" value=\"Modifier\">" +
                                     "</form>"
                                 document.getElementById("supp_rel").value = params.edges;
+                                document.getElementById("modif_rel").value = params.edges;
                                 break
 
                             }

@@ -318,9 +318,25 @@ app.get('/', cas.bounce, function(req,res){
            res.render('index');
 
 });
-app.get('/download',cas.bounce, function(req,res){
-    res.download(chemin, "content.csv", function (err) {
-console.log(err)
+app.get('/download',cas.bounce, function(req,res) {
+    fs.readFile(chemin, 'utf8', function (err, data) {
+        var dataArray = data.split(/\r?\n/);
+
+        let donnee = ""
+        for (let i = 0; i < dataArray.length; i++) {
+            donnee = donnee + dataArray[i].replace(/"/gi, '') + "\n"
+
+        }
+        console.log(donnee)
+        fs.writeFile('views/data.csv', donnee, function (err, data) {
+            console.log(err)
+            res.download('views/data.csv', "content.csv", function (error) {
+                console.log(error)
+            })
+
+        })
+
+
     })
 })
 app.post('/filtrer', function(req,res){
@@ -515,6 +531,31 @@ app.post('/supp/relation', function(req, res){
         })
 
 });
+app.post('/modif/relation', function(req, res){
+    var noeud = req.body.rel_a_modif;
+    var num = req.body.cout;
+    console.log(num)
+    console.log(noeud)
+
+    session
+        .run('MATCH()-[r]->() WHERE r.identifiant = $supParam SET r.cout = $coutParam', {supParam: parseInt(noeud, 10),coutParam:num})
+        .then(function(){
+            refresh_csv(function () {
+                setTimeout(function(){
+                    refresh_json(function () {
+                        res.redirect('/')
+                    })
+                },300)
+
+
+            });
+
+        })
+        .catch(function (err) {
+            console.log(err);
+        })
+
+});
 app.post('/reinit', function(req, res){
     setTimeout(function () {
         refresh_csv(function () {
@@ -610,14 +651,31 @@ app.post('/filtrer/noeud', function(req,res){
     var cm5=req.body.cm5
     var tabcm=[cm1,cm2,cm3,cm4,cm5]
 
+    var asc = req.body.asc;
+    var des =req.body.des;
+
 
 
 
     if(!a){
         a=0;
     }
-    console.log(a)
-    let demande ="MATCH (n)-[r:LIEN]-(m) WHERE id(n)=$idParam\n" ;
+    console.log(asc)
+    let demande=""
+    if(!asc && !des){
+        demande ="MATCH (n)-[r:LIEN]-(m) WHERE id(n)=$idParam\n"
+    }
+    else if(asc=="asc" && des =="des"){
+        demande ="MATCH (n)-[r:LIEN]-(m) WHERE id(n)=$idParam\n" ;
+        console.log("ok")
+    }
+    else if(asc=="asc"){
+        demande ="MATCH (n)<-[r:LIEN]-(m) WHERE id(n)=$idParam\n" ;
+    }
+    else{
+        demande ="MATCH (n)-[r:LIEN]->(m) WHERE id(n)=$idParam\n" ;
+    }
+
     let collectnoeud = "WITH [n,m"
     let collectrel = ",[r"
     let p ="pont"
