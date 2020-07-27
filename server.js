@@ -7,11 +7,11 @@ var multer = require('multer');
 var sess = require('express-session');
 var CASAuthentification = require('cas-authentication');
 
-var chemin = '../neo4j-community-4.0.4/import/all.csv';
+var chemin = '/var/lib/neo4j/import/all.csv';
 
 var cas = new CASAuthentification({
     cas_url     : 'https://llng-auth-dev.insa-lyon.fr/cas',
-    service_url : 'http://localhost:8080'
+    service_url : 'http://insa-web02.insa-lyon.fr'
 });
 
 var app = express();
@@ -254,18 +254,22 @@ let upload = multer({dest: 'Uploads/'});
                         "\"z10\":"+donnee[15]+", " +
                         "\"color\":{\"background\":\"yellow\", \"highlight\":\"blue\"}}\n"
                 }
-                else {
-                    if (rel != "\"edges\" : [\n") {
-                        rel = rel + ","
+            else {
+                    if (!donnee[24]) {
+                    } else {
+                        if (rel != "\"edges\" : [\n") {
+                            rel = rel + ","
+                        }
+                        rel = rel + "{\"from\":" + donnee[24] + "," +
+                            " \"to\":" + donnee[25] + "," +
+                            "\"id\":" + donnee[28] +
+                            ",\"label\":" + donnee[27] +
+                            "}\n"
                     }
-                    rel = rel + "{\"from\":" + donnee[24] + "," +
-                        " \"to\":" + donnee[25] + "," +
-                        "\"id\":" + donnee[28] +
-                        ",\"label\":" + donnee[27] +
-                        "}\n"
                 }
             }
-            data = noeud + "],\n" + rel + "]}";
+		data = noeud + "],\n" + rel + "]}";
+
 
 
             fs.writeFile('views/doute.json', data, function (err, data) {
@@ -1174,6 +1178,7 @@ app.post('/import/propositions',upload.single("Chosir un fichier"), function (re
                     a=a.replace(/\n/gi, ' ');
                     a=a.replace(/,/gi, ' ');
                     a=a.replace(/'/gi, '\'');
+		    a=a.replace(/Â /gi, '');
                     tab.push(a)
                 }
 
@@ -1199,7 +1204,7 @@ app.post('/import/propositions',upload.single("Chosir un fichier"), function (re
 
                 if(tab[7]=="Oui"){
                     for(let k =9; k<=17; k++){
-                        if(tab[k]==='') {}
+                        if(tab[k]==='' || tab[k]===' ') {}
                         else{
                             result = result + "CREATE(" + n + ")-[" + r + (k - 8) + ":LIEN {cout:" + tab[k] + "}]->(" + e + (k - 8) + ")\n";
                             result = result + "SET " + r + (k - 8) + ".identifiant= id(" + r + (k - 8) + ")\n"}
